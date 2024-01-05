@@ -12,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageTitle from "../../Shared/PageTitle/PageTitle";
 import axios from "axios";
+import useToken from "../../../hooks/useToken";
 
 const Login = () => {
   const emailRef = useRef("");
@@ -26,12 +27,14 @@ const Login = () => {
 
   const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(auth);
 
+  const [token] = useToken(user);
+
   if (loading || sending) {
     return <Loading></Loading>;
   }
 
-  if (user) {
-    // navigate(from, { replace: true });
+  if (token) {
+    navigate(from, { replace: true });
   }
 
   if (error) {
@@ -44,9 +47,12 @@ const Login = () => {
     const password = passwordRef.current.value;
 
     await signInWithEmailAndPassword(email, password);
-    const { data } = await axios.post("http://localhost:5000/login", { email });
-    localStorage.setItem("accessToken", data);
-    navigate(from, { replace: true });
+    // event.target.reset();
+    // using manually------------
+    // const { data } = await axios.post("http://localhost:5000/login", { email });
+    // localStorage.setItem("accessToken", data);
+    // -------------------------
+    // used with my custom hook useTOken
   };
 
   const navigateRegister = (event) => {

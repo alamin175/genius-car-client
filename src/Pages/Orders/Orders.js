@@ -11,7 +11,7 @@ const Orders = () => {
   const navigate = useNavigate();
   // console.log(user.email);
   useEffect(() => {
-    const email = user.email;
+    const email = user?.email;
     const url = `http://localhost:5000/orders?email=${email}`;
     // using async await function and axios
     const getOrders = async () => {
@@ -34,8 +34,15 @@ const Orders = () => {
   }, [user]);
 
   return (
-    <div>
+    <div className="w-50 mx-auto">
       <h1>This is your order :{orders.length} </h1>
+      {orders.map((order) => (
+        <div key={order._id}>
+          <p>
+            {order.email} ::: {order.service}{" "}
+          </p>
+        </div>
+      ))}
     </div>
   );
 };
